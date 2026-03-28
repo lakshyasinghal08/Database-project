@@ -1,0 +1,79 @@
+from flask import Flask, request, jsonify
+import sqlite3
+
+app = Flask(__name__)
+
+# 🔹 Database connection
+def get_db():
+    conn = sqlite3.connect("database.db")
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# 🔹 Create table
+def init_db():
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS students (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            age INTEGER,
+            marks INTEGER
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+init_db()
+
+# 🔹 Get all students
+@app.route('/students', methods=['GET'])
+def get_students():
+    conn = get_db()
+    students = conn.execute("SELECT * FROM students").fetchall()
+    conn.close()
+
+    return jsonify([dict(row) for row in students])
+
+# 🔹 Add student
+@app.route('/students', methods=['POST'])
+def add_student():
+    data = request.json
+
+    conn = get_db()
+    conn.execute(
+        "INSERT INTO students (name, age, marks) VALUES (?, ?, ?)",
+        (data['name'], data['age'], data['marks'])
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Student added successfully"})
+
+# 🔹 Update student
+@app.route('/students/<int:id>', methods=['PUT'])
+def update_student(id):
+    data = request.json
+
+    conn = get_db()
+    conn.execute(
+        "UPDATE students SET name=?, age=?, marks=? WHERE id=?",
+        (data['name'], data['age'], data['marks'], id)
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Student updated successfully"})
+
+# 🔹 Delete student
+@app.route('/students/<int:id>', methods=['DELETE'])
+def delete_student(id):
+    conn = get_db()
+    conn.execute("DELETE FROM students WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Student deleted successfully"})
+
+# 🔹 Run server
+if __name__ == "__main__":
+    app.run(debug=True)

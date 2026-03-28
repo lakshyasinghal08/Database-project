@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- Header -->
+    <header class="header">
+        <h1>🎓 Student Management Dashboard</h1>
+        <p>Manage student records with percentage calculation</p>
+    </header>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stat-card">
+            <h3>Total Students</h3>
+            <p id="totalStudents">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Average %</h3>
+            <p id="avgPercentage">0%</p>
+        </div>
+        <div class="stat-card">
+            <h3>Highest %</h3>
+            <p id="highestPercentage">0%</p>
+        </div>
+    </section>
+
+    <!-- Form -->
+    <section class="card">
+        <h2 id="formTitle">➕ Add Student</h2>
+
+        <input type="hidden" id="studentId">
+
+        <div class="form-grid">
+            <input type="text" id="name" placeholder="Name">
+            <input type="number" id="age" placeholder="Age">
+
+            <input type="number" id="sub1" placeholder="Subject 1">
+            <input type="number" id="sub2" placeholder="Subject 2">
+            <input type="number" id="sub3" placeholder="Subject 3">
+            <input type="number" id="sub4" placeholder="Subject 4">
+            <input type="number" id="sub5" placeholder="Subject 5">
+        </div>
+
+        <div class="form-actions">
+            <button onclick="saveStudent()">💾 Save</button>
+            <button onclick="resetForm()" class="secondary-btn" id="cancelBtn" style="display:none;">Cancel</button>
+        </div>
+
+        <p id="message"></p>
+    </section>
+
+    <!-- Search -->
+    <section class="card">
+        <input type="text" id="search" placeholder="🔍 Search student..." onkeyup="filterStudents()">
+    </section>
+
+    <!-- Table -->
+    <section class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>S1</th>
+                    <th>S2</th>
+                    <th>S3</th>
+                    <th>S4</th>
+                    <th>S5</th>
+                    <th>Total</th>
+                    <th>%</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="studentsTable"></tbody>
+        </table>
+    </section>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
